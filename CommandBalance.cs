@@ -17,7 +17,7 @@ namespace fr34kyn01535.Uconomy
 
         public string Syntax => "(player)";
 
-        public List<string> Aliases => new List<string>();
+        public List<string> Aliases => new List<string> { "bal" };
 
         public List<string> Permissions => new List<string> {"uconomy.balance"};
 
@@ -25,7 +25,7 @@ namespace fr34kyn01535.Uconomy
         {
             if (command.Length == 1)
             {
-                if (caller.HasPermission("balance.check"))
+                if (caller.HasPermission("uconomy.checkbalance"))
                 {
                     var target = UnturnedPlayer.FromName(command[0]);
                     if (target != null)
@@ -34,19 +34,19 @@ namespace fr34kyn01535.Uconomy
                         UnturnedChat.Say(caller,
                             Uconomy.Instance.Translate("command_balance_show_otherPlayer",
                                 Uconomy.Instance.Configuration.Instance.MoneySymbol, balance,
-                                Uconomy.Instance.Configuration.Instance.MoneyName),
-                            UnturnedChat.GetColorFromName(Uconomy.MessageColor, Color.green));
+                                Uconomy.Instance.Configuration.Instance.MoneyName, target.CharacterName),
+                            UnturnedChat.GetColorFromName(Uconomy.MessageColor, Color.green), "https://i.imgur.com/hOhFr7X.png");
                     }
                     else
                     {
                         UnturnedChat.Say(caller, Uconomy.Instance.Translate("command_balance_error_player_not_found"),
-                            UnturnedChat.GetColorFromName(Uconomy.MessageColor, Color.green));
+                            UnturnedChat.GetColorFromName(Uconomy.MessageColor, Color.green), "https://i.imgur.com/FeIvao9.png");
                     }
                 }
                 else
                 {
                     UnturnedChat.Say(caller, Uconomy.Instance.Translate("command_balance_check_noPermissions"),
-                        UnturnedChat.GetColorFromName(Uconomy.MessageColor, Color.green));
+                        UnturnedChat.GetColorFromName(Uconomy.MessageColor, Color.green), "https://i.imgur.com/FeIvao9.png");
                 }
             }
             else
@@ -56,7 +56,7 @@ namespace fr34kyn01535.Uconomy
                     Uconomy.Instance.Translations.Instance.Translate("command_balance_show",
                         Uconomy.Instance.Configuration.Instance.MoneySymbol, balance,
                         Uconomy.Instance.Configuration.Instance.MoneyName),
-                    UnturnedChat.GetColorFromName(Uconomy.MessageColor, Color.green));
+                    UnturnedChat.GetColorFromName(Uconomy.MessageColor, Color.green), "https://i.imgur.com/hOhFr7X.png");
             }
         }
     }

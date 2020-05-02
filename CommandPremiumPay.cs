@@ -7,26 +7,26 @@ using UnityEngine;
 
 namespace fr34kyn01535.Uconomy
 {
-    public class CommandPay : IRocketCommand
+    public class CommandPremiumPay : IRocketCommand
     {
-        public string Help => "Pays a specific player money from your account";
+        public string Help => "Pays a specific player premium money from your account";
 
-        public string Name => "pay";
+        public string Name => "premiumpay";
 
         public AllowedCaller AllowedCaller => AllowedCaller.Both;
 
         public string Syntax => "<player> <amount>";
 
-        public List<string> Aliases => new List<string>();
+        public List<string> Aliases => new List<string> { "ppay" };
 
-        public List<string> Permissions => new List<string> {"uconomy.pay"};
+        public List<string> Permissions => new List<string> { "uconomy.premiumpay" };
 
         public void Execute(IRocketPlayer caller, params string[] command)
         {
             if (command.Length != 2)
             {
                 UnturnedChat.Say(caller, Uconomy.Instance.Translations.Instance.Translate("command_pay_invalid"),
-                    UnturnedChat.GetColorFromName(Uconomy.MessageColor, Color.green), "https://i.imgur.com/FeIvao9.png");
+                    UnturnedChat.GetColorFromName(Uconomy.PremiumMessageColor, Color.green), "https://i.imgur.com/FeIvao9.png");
                 return;
             }
 
@@ -40,7 +40,7 @@ namespace fr34kyn01535.Uconomy
                 {
                     UnturnedChat.Say(caller,
                         Uconomy.Instance.Translations.Instance.Translate("command_pay_error_pay_self"),
-                        UnturnedChat.GetColorFromName(Uconomy.MessageColor, Color.green)  , "https://i.imgur.com/FeIvao9.png");
+                        UnturnedChat.GetColorFromName(Uconomy.PremiumMessageColor, Color.green), "https://i.imgur.com/FeIvao9.png");
                     return;
                 }
 
@@ -48,51 +48,51 @@ namespace fr34kyn01535.Uconomy
                 {
                     UnturnedChat.Say(caller,
                         Uconomy.Instance.Translations.Instance.Translate("command_pay_error_invalid_amount"),
-                        UnturnedChat.GetColorFromName(Uconomy.MessageColor, Color.green), "https://i.imgur.com/FeIvao9.png");
+                        UnturnedChat.GetColorFromName(Uconomy.PremiumMessageColor, Color.green), "https://i.imgur.com/FeIvao9.png");
                     return;
                 }
 
                 if (caller is ConsolePlayer)
                 {
-                    Uconomy.Instance.Database.IncreaseBalance(otherPlayer, amount);
+                    Uconomy.Instance.Database.IncreasePremiumBalance(otherPlayer, amount);
                     if (otherPlayerOnline != null)
                         UnturnedChat.Say(otherPlayerOnline,
                             Uconomy.Instance.Translations.Instance.Translate("command_pay_console", amount,
-                                Uconomy.Instance.Configuration.Instance.MoneyName),
-                            UnturnedChat.GetColorFromName(Uconomy.MessageColor, Color.green), "https://i.imgur.com/hOhFr7X.png");
+                                Uconomy.Instance.Configuration.Instance.PremiumMoneyName),
+                            UnturnedChat.GetColorFromName(Uconomy.PremiumMessageColor, Color.green));
                 }
                 else
                 {
-                    var myBalance = Uconomy.Instance.Database.GetBalance(caller.Id);
+                    var myBalance = Uconomy.Instance.Database.GetPremiumBalance(caller.Id);
                     if (myBalance - amount <= 0)
                     {
                         UnturnedChat.Say(caller,
-                            Uconomy.Instance.Translations.Instance.Translate("command_pay_error_cant_afford"),
-                            UnturnedChat.GetColorFromName(Uconomy.MessageColor, Color.green), "https://i.imgur.com/FeIvao9.png");
+                            Uconomy.Instance.Translations.Instance.Translate("command_premium_pay_error_cant_afford"),
+                            UnturnedChat.GetColorFromName(Uconomy.PremiumMessageColor, Color.green), "https://i.imgur.com/FeIvao9.png");
                     }
                     else
                     {
-                        Uconomy.Instance.Database.IncreaseBalance(caller.Id, -amount);
+                        Uconomy.Instance.Database.IncreasePremiumBalance(caller.Id, -amount);
                         if (otherPlayerOnline != null)
                             UnturnedChat.Say(caller,
                                 Uconomy.Instance.Translations.Instance.Translate("command_pay_private",
                                     otherPlayerOnline.CharacterName, amount,
-                                    Uconomy.Instance.Configuration.Instance.MoneyName),
-                                UnturnedChat.GetColorFromName(Uconomy.MessageColor, Color.green), "https://i.imgur.com/hOhFr7X.png");
+                                    Uconomy.Instance.Configuration.Instance.PremiumMoneyName),
+                                UnturnedChat.GetColorFromName(Uconomy.PremiumMessageColor, Color.green), "https://i.imgur.com/hOhFr7X.png");
                         else
                             UnturnedChat.Say(caller,
                                 Uconomy.Instance.Translations.Instance.Translate("command_pay_private", otherPlayer,
-                                    amount, Uconomy.Instance.Configuration.Instance.MoneyName),
-                                UnturnedChat.GetColorFromName(Uconomy.MessageColor, Color.green), "https://i.imgur.com/hOhFr7X.png");
+                                    amount, Uconomy.Instance.Configuration.Instance.PremiumMoneyName),
+                                UnturnedChat.GetColorFromName(Uconomy.PremiumMessageColor, Color.green), "https://i.imgur.com/hOhFr7X.png");
 
-                        Uconomy.Instance.Database.IncreaseBalance(otherPlayer, amount);
+                        Uconomy.Instance.Database.IncreasePremiumBalance(otherPlayer, amount);
                         if (otherPlayerOnline != null)
                             UnturnedChat.Say(otherPlayerOnline.CSteamID,
                                 Uconomy.Instance.Translations.Instance.Translate("command_pay_other_private", amount,
-                                    Uconomy.Instance.Configuration.Instance.MoneyName, caller.DisplayName),
-                                UnturnedChat.GetColorFromName(Uconomy.MessageColor, Color.green), "https://i.imgur.com/hOhFr7X.png");
+                                    Uconomy.Instance.Configuration.Instance.PremiumMoneyName, caller.DisplayName),
+                                UnturnedChat.GetColorFromName(Uconomy.PremiumMessageColor, Color.green), "https://i.imgur.com/hOhFr7X.png");
 
-                        Uconomy.Instance.HasBeenPayed((UnturnedPlayer) caller, otherPlayer, amount);
+                        Uconomy.Instance.HasBeenPayed((UnturnedPlayer)caller, otherPlayer, amount);
                         Uconomy.Instance.Database.AddHistory(otherPlayerOnline.CSteamID, "Uconomy", amount, "Paid by " + caller.DisplayName);
                         Uconomy.Instance.Database.AddHistory(((UnturnedPlayer)caller).CSteamID, "Uconomy", -amount, "Paid to " + caller.DisplayName);
                     }
