@@ -16,15 +16,7 @@ namespace fr34kyn01535.Uconomy
         public void Execute(IRocketPlayer caller, string[] command)
         {
             UnturnedPlayer player = (UnturnedPlayer)caller;
-            if(command[0] == "up")
-            {
-                Uconomy.Instance.DoUI(player, command[0]);
-            }
-            else if (command[0] == "right")
-            {
-                Uconomy.Instance.DoUI(player, command[0]);
-            }
-            else if (command[0] == "on")
+            if (command[0] == "on")
             {
                 Uconomy.Instance.DoUI(player, command[0]);
             }
